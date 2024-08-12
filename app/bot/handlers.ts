@@ -14,7 +14,7 @@ import { PrismaClient } from "@prisma/client";
 const db = new PrismaClient();
 const tron = new TronScanClient({
   url: "https://apilist.tronscanapi.com/api",
-  apiKey: "f319caa6-b543-4762-b879-ecebd9823ba7",
+  apiKey: process.env.TRONSCAN_API_KEY,
 });
 
 export async function handleTransactionQuery(
