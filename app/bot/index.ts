@@ -8,6 +8,7 @@ import {
   handleAuthAdd,
   handleAuthRemove,
   handleClose,
+  handleEngery,
   handleId,
   handleInfoQuery,
   handleNotify,
@@ -48,6 +49,7 @@ bot.command(["start", "help"], handleStartOrHelp);
 bot.command(["risk", "info"], handleRiskOrInfo);
 bot.command("id", handleId);
 bot.command("price", handlePrice);
+bot.command("engery", handleEngery);
 
 bot.hears(/^授权 (.*)/, handleAuth);
 bot.hears(/增加授权 (\d+)/, checkPremium, handleAuthAdd);

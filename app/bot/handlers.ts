@@ -388,3 +388,17 @@ export async function middlewareClientToBD(ctx: IContext, next: NextFunction) {
   ctx.session.client = client;
   return next();
 }
+export async function handleEngery(ctx: CommandContext<IContext>) {
+  const address = await db.address.findFirst({ where: { name: "能量" } });
+  if (!address) {
+    return ctx.reply("未设置能量地址");
+  }
+  return ctx.reply(
+    sanitizeMarkdown(
+      `能量单价: ${address.price}TRX/笔\n转账地址: \`${address.address}\``
+    ),
+    {
+      parse_mode: "MarkdownV2",
+    }
+  );
+}
