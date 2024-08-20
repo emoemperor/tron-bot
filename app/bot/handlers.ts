@@ -147,12 +147,7 @@ export async function handleInfoQuery(ctx: HearsContext<IContext> | IContext) {
     }
   );
 }
-export async function handlePrice(ctx: HearsContext<IContext> | IContext) {
-  const message = await ctx.reply("正在获取价格，请稍后……", {
-    reply_parameters: { message_id: ctx.message?.message_id! },
-  });
-  const now = dayjs();
-
+export async function getPirceData() {
   try {
     const { data } = await axios.get<{
       code: number;
@@ -209,6 +204,26 @@ export async function handlePrice(ctx: HearsContext<IContext> | IContext) {
         },
       }
     );
+    return data;
+  } catch (error) {
+    return undefined;
+  }
+}
+export async function handlePrice(ctx: HearsContext<IContext> | IContext) {
+  const message = await ctx.reply("正在获取价格，请稍后……", {
+    reply_parameters: { message_id: ctx.message?.message_id! },
+  });
+  const now = dayjs();
+
+  try {
+    const data = await getPirceData();
+    if (!data) {
+      return ctx.api.editMessageText(
+        ctx.chat?.id!,
+        message.message_id,
+        "获取价格失败"
+      );
+    }
     let reply = `Okx大宗交易前5名价格 
 获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}      
       `;
