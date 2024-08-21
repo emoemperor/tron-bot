@@ -15,12 +15,12 @@ export async function GET() {
   if (!data) {
     return Response.json({ message: "获取数据失败" }, { status: 500 });
   }
-  let reply = `Okx大宗交易前5名价格 
-    获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}      
-          `;
+  let reply = `定时价格推送\n\n
+Okx大宗交易前5名价格 
+获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}`;
   reply += data.data.buy.slice(0, 5).map(
     ({ nickName, price }, idx) => `
-    第${idx + 1}位 ${nickName} ¥${price}`
+第${idx + 1}位 ${nickName} ¥${price}`
   );
   const clients = await db.client.findMany();
   for (const client of clients) {
