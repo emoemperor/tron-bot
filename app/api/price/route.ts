@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'; 
 import { getPirceData } from "@/app/bot/handlers";
 import { PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
