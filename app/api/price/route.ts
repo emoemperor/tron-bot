@@ -5,11 +5,19 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { bot } from "@/app/bot";
 import { sanitizeMarkdown } from "telegram-markdown-sanitizer";
+import { NextRequest } from "next/server";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault("Asia/Shanghai");
 const db = new PrismaClient();
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const authHeader = req.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
+  }
+
   const now = dayjs();
   const data = await getPirceData();
   if (!data) {
