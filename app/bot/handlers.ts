@@ -225,12 +225,10 @@ export async function handlePrice(ctx: HearsContext<IContext> | IContext) {
       );
     }
     let reply = `Okx大宗交易前5名价格 
-获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}      
-      `;
-    reply += data.data.buy.slice(0, 5).map(
-      ({ price }, idx) => `
-第${idx + 1}位 ¥${price}`
-    );
+获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}\n`;
+    reply += data.data.buy
+      .slice(0, 5)
+      .map(({ price }, idx) => `第${idx + 1}位 ¥${price}\n`);
     return ctx.api.editMessageText(
       ctx.chat?.id!,
       message.message_id,
