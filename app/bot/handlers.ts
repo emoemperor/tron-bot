@@ -228,8 +228,8 @@ export async function handlePrice(ctx: HearsContext<IContext> | IContext) {
 获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}      
       `;
     reply += data.data.buy.slice(0, 5).map(
-      ({ nickName, price }, idx) => `
-第${idx + 1}位 ${nickName} ¥${price}`
+      ({ price }, idx) => `
+第${idx + 1}位 ¥${price}`
     );
     return ctx.api.editMessageText(
       ctx.chat?.id!,

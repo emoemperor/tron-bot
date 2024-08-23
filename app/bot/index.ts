@@ -29,6 +29,8 @@ export interface SessionData {
   lastAction?: SessionAction;
 }
 export type IContext = Context & SessionFlavor<SessionData>;
+console.log(process.env.BOT_TOKEN);
+
 export const bot = new Bot<IContext>(process.env.BOT_TOKEN!);
 function initSession(): SessionData {
   return {};

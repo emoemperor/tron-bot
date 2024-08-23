@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic'; 
+export const dynamic = "force-dynamic";
 import { getPirceData } from "@/app/bot/handlers";
 import { PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
@@ -28,8 +28,8 @@ export async function GET(req: NextRequest) {
 Okx大宗交易前5名价格 
 获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}`;
   reply += data.data.buy.slice(0, 5).map(
-    ({ nickName, price }, idx) => `
-第${idx + 1}位 ${nickName} ¥${price}`
+    ({ price }, idx) => `
+第${idx + 1}位 ¥${price}`
   );
   const clients = await db.client.findMany();
   for (const client of clients) {
