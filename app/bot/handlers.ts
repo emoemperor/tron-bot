@@ -224,10 +224,10 @@ export async function handlePrice(ctx: HearsContext<IContext> | IContext) {
         "获取价格失败"
       );
     }
-    let reply = `Okx大宗交易前5名价格 
+    let reply = `Okx大宗交易前10名价格 
 获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}\n`;
     reply += data.data.buy
-      .slice(0, 5)
+      .slice(0, 10)
       .map(({ price }, idx) => `第${idx + 1}位 ¥${price}\n`);
     return ctx.api.editMessageText(
       ctx.chat?.id!,
