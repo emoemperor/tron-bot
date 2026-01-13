@@ -25,10 +25,10 @@ export async function GET(req: NextRequest) {
     return Response.json({ message: "获取数据失败" }, { status: 500 });
   }
   let reply = `定时价格推送\n\n
-Okx大宗交易前5名价格 
+Okx大宗交易前10名价格 
 获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}\n`;
   reply += data.data.buy
-    .slice(0, 5)
+    .slice(0, 10)
     .map(({ price }, idx) => `第${idx + 1}位 ¥${price}\n`);
   const clients = await db.client.findMany();
   for (const client of clients) {
