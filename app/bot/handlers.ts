@@ -234,7 +234,7 @@ export async function handlePrice(ctx: HearsContext<IContext> | IContext) {
     
     // 大宗交易价格列表
     if (blockTradeData) {
-      reply += `📊 **大宗交易前10名价格**\n`;
+      reply += `📊 \*\*大宗交易前10名价格\*\*\n`;
       reply += blockTradeData.data.buy
         .slice(0, 10)
         .map(({ price }, idx) => `第${idx + 1}位 ¥${price}`)
@@ -244,7 +244,7 @@ export async function handlePrice(ctx: HearsContext<IContext> | IContext) {
     
     // VIP专享价格列表
     if (vipData) {
-      reply += `💎 **VIP专享前10名价格**\n`;
+      reply += `💎 \*\*VIP专享前10名价格\*\*\n`;
       reply += vipData.data.buy
         .slice(0, 10)
         .map(({ price }, idx) => `第${idx + 1}位 ¥${price}`)
