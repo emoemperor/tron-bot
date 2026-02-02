@@ -147,7 +147,7 @@ export async function handleInfoQuery(ctx: HearsContext<IContext> | IContext) {
     }
   );
 }
-export async function getPirceData() {
+export async function getPirceData(userType: 'vip' | 'blockTrade' = 'blockTrade') {
   try {
     const { data } = await axios.get<{
       code: number;
@@ -196,7 +196,7 @@ export async function getPirceData() {
         }[];
       };
     }>(
-      "https://www.okx.com/v3/c2c/tradingOrders/books?quoteCurrency=CNY&baseCurrency=USDT&side=buy&paymentMethod=all&userType=blockTrade&receivingAds=false",
+      `https://www.okx.com/v3/c2c/tradingOrders/books?quoteCurrency=CNY&baseCurrency=USDT&side=buy&paymentMethod=all&userType=${userType}&receivingAds=false`,
       {
         headers: {
           "User-Agent":
@@ -209,6 +209,7 @@ export async function getPirceData() {
     return undefined;
   }
 }
+
 export async function handlePrice(ctx: HearsContext<IContext> | IContext) {
   const message = await ctx.reply("正在获取价格，请稍后……", {
     reply_parameters: { message_id: ctx.message?.message_id! },
@@ -216,19 +217,40 @@ export async function handlePrice(ctx: HearsContext<IContext> | IContext) {
   const now = dayjs();
 
   try {
-    const data = await getPirceData();
-    if (!data) {
+    // 获取大宗交易价格
+    const blockTradeData = await getPirceData('blockTrade');
+    // 获取VIP专享价格
+    const vipData = await getPirceData('vip');
+    
+    if (!blockTradeData && !vipData) {
       return ctx.api.editMessageText(
         ctx.chat?.id!,
         message.message_id,
         "获取价格失败"
       );
     }
-    let reply = `Okx大宗交易前10名价格 
-获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}\n`;
-    reply += data.data.buy
-      .slice(0, 10)
-      .map(({ price }, idx) => `第${idx + 1}位 ¥${price}\n`);
+
+    let reply = `Okx价格信息\n获取时间:${now.tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm")}\n\n`;
+    
+    // 大宗交易价格列表
+    if (blockTradeData) {
+      reply += `📊 **大宗交易前10名价格**\n`;
+      reply += blockTradeData.data.buy
+        .slice(0, 10)
+        .map(({ price }, idx) => `第${idx + 1}位 ¥${price}`)
+        .join('\n');
+      reply += '\n\n';
+    }
+    
+    // VIP专享价格列表
+    if (vipData) {
+      reply += `💎 **VIP专享前10名价格**\n`;
+      reply += vipData.data.buy
+        .slice(0, 10)
+        .map(({ price }, idx) => `第${idx + 1}位 ¥${price}`)
+        .join('\n');
+    }
+
     return ctx.api.editMessageText(
       ctx.chat?.id!,
       message.message_id,
